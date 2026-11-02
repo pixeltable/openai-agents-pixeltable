@@ -53,5 +53,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -e ".[dev]" "pixeltable==0.7.22" "openai-agents @ git+https://github.com/openai/openai-agents-python.git@16fdb2091d0b18cc1200d26ba6a20ee6f1962455"
+      # The package pin is a later git commit of openai-agents 0.24.0. Pip treats
+      # that as a conflict with this older commit, so install the minimums first
+      # and add this package without resolving dependencies again.
+      - run: |
+          pip install \
+            "pixeltable==0.7.22" \
+            "openai-agents @ git+https://github.com/openai/openai-agents-python.git@16fdb2091d0b18cc1200d26ba6a20ee6f1962455" \
+            "mypy>=1.10" \
+            "pytest>=8.0" \
+            "pytest-asyncio>=0.24" \
+            "ruff==0.16.8"
+          pip install -e . --no-deps
       - run: pytest tests/ -v
