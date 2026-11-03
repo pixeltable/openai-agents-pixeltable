@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]  # PEP 639 license metadata floor
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openai-agents-pixeltable"
+version = "0.1.0"
+description = "Pixeltable session storage for the OpenAI Agents SDK."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [
+    { name = "Pixeltable", email = "contact@pixeltable.com" },
+]
+keywords = ["openai", "openai-agents", "pixeltable", "session", "memory", "agents"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    # create_table/get_table if_exists, insert, where/order_by/limit/select, delete, btree indexes.
+    "pixeltable>=0.7.22",
+    # await_session_mutation, coerce_session_settings, and resolve_session_limit were added in
+    # openai/openai-agents-python#5428 (merged 2026-10-26). They are not in the PyPI 0.24.0
+    # release (2026-10-15); the version on main is still 0.24.0. This is the tested commit.
+    # The session helper source is unchanged from the merge commit 16fdb2091d0b18cc1200d26ba6a20ee6f1962455.
+    # PyPI rejects a direct URL dependency, so this package is installed from source until
+    # those helpers are in a PyPI release. See CONTRIBUTING.md.
+    "openai-agents @ git+https://github.com/openai/openai-agents-python.git@e355d69152d4f4730dfb03b63dbce53e8d9f5d8c",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff==0.16.8",
+    "build",
+]
+
+[project.urls]
+Homepage = "https://github.com/pixeltable/openai-agents-pixeltable"
+Repository = "https://github.com/pixeltable/openai-agents-pixeltable"
+Documentation = "https://github.com/pixeltable/openai-agents-pixeltable#readme"
+Issues = "https://github.com/pixeltable/openai-agents-pixeltable/issues"
+Discord = "https://discord.gg/QPyqFYx2UN"
+
+[tool.setuptools.packages.find]
+include = ["openai_agents_pixeltable*"]
+
+[tool.setuptools.package-data]
+openai_agents_pixeltable = ["py.typed"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "B",
+    "C4",
+    "UP",
+]
+ignore = [
+    "E501",
+]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["openai_agents_pixeltable"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[[tool.mypy.overrides]]
+module = ["pixeltable", "pixeltable.*"]
+ignore_missing_imports = true
