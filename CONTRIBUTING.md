@@ -22,8 +22,4 @@ Tests use a Pixeltable catalog under a temp directory, not `~/.pixeltable`. They
 
 ## Releasing
 
-Publishing uses PyPI trusted publishing. Do not add a token to the repository.
-
-1. Bump `version` in `pyproject.toml`.
-2. Merge to `main`.
-3. Create a GitHub Release whose tag is `v` plus that version, for example `v0.1.0`. The release workflow checks the tag and publishes the built distributions.
+Do not publish while `openai-agents` is pinned to a git commit. PyPI rejects a distribution whose metadata declares a direct URL dependency. Publish only after the session helpers from [openai/openai-agents-python#5428](https://github.com/openai/openai-agents-python/pull/5428) are in a PyPI release of `openai-agents` and this package depends on that release.

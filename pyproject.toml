@@ -31,6 +31,8 @@ dependencies = [
     # openai/openai-agents-python#5428 (merged 2026-10-26). They are not in the PyPI 0.24.0
     # release (2026-10-15); the version on main is still 0.24.0. This is the tested commit.
     # The session helper source is unchanged from the merge commit 16fdb2091d0b18cc1200d26ba6a20ee6f1962455.
+    # PyPI rejects a direct URL dependency, so this package is installed from source until
+    # those helpers are in a PyPI release. See CONTRIBUTING.md.
     "openai-agents @ git+https://github.com/openai/openai-agents-python.git@e355d69152d4f4730dfb03b63dbce53e8d9f5d8c",
 ]
 
